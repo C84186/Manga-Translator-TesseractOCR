@@ -16,7 +16,7 @@ def main():
     images = load_images_from_folder(imgPath)
     print("Processing images:")
     names = load_names_from_folder(imgPath)
-    print("JAPANESE" + " " + "->" + " " + "VIETNAMESE")
+    print("JAPANESE" + " " + "->")
 
     transImg = []
     i = 0
@@ -33,6 +33,8 @@ def main():
 
     for trans in transImg:
         saveFile = os.path.join(transPath, names[i])
+        if not os.path.exists(transPath):
+            os.makedirs(transPath)
         trans.save(saveFile)
         i = i + 1
 

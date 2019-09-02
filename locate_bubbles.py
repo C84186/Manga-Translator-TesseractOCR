@@ -16,10 +16,8 @@ if sys.platform == "win32":
     )
 
 translator = Translator()
-
-if __name__ == "__main__":
-    img = cv2.imread(sys.argv[1])
-    get_blurbs(img)
+# lang = "kor_vert"
+lang = "jpn_vert"
 
 
 def get_params():
@@ -95,7 +93,7 @@ def get_blurbs(img):
             pil_image = Image.fromarray(image)
 
             text = pytesseract.image_to_string(
-                pil_image, lang="jpn_vert", config=get_params()
+                pil_image, lang=lang, config=get_params()
             )
             if text:
                 blurb = Blurb(x, y, w, h, text)
@@ -104,3 +102,8 @@ def get_blurbs(img):
                 # print ("Attempt: " + text + ' -> ' + translator.translate(text,dest='vi').text)
 
     return blurbs
+
+
+if __name__ == "__main__":
+    img = cv2.imread(sys.argv[1])
+    get_blurbs(img)

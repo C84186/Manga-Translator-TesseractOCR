@@ -45,7 +45,7 @@ def flow_into_box(text, w, font=None, min_word_on_line=0.3):
                 lines.append(line)
                 line = ""
             else:
-                split = max(int(proportion_of_fit * len(c_text)) / 2, 1)
+                split = max(int(proportion_of_fit * len(c_text)) // 2, 1)
                 c_text = c_text[:split] + "-"
                 lines.append(c_text)
                 idx += len(c_text) - 1
@@ -61,7 +61,7 @@ def flow_into_box(text, w, font=None, min_word_on_line=0.3):
         lines.append(safe_ascii(line))
 
     # ensure that it it can be latin encoded
-    print(lines)
+    # print(lines)
     return "\n".join(lines)
 
 
@@ -73,17 +73,19 @@ def typeset_blurb(img, blurb):
 
     area = blurb.w * blurb.h
     fontsize = int(math.sqrt(area) / 10)
-    usingFont = ImageFont.truetype(font="ccwildword.ttf", size=fontsize)
+    # usingFont = ImageFont.truetype(font="ccwildword.ttf", size=fontsize)
+    usingFont = ImageFont.truetype(font="arial.ttf", size=fontsize)
 
     # pickle.dump(img, open("tts.pkl", mode="w"))
     flowed = flow_into_box(text, blurb.w, usingFont)
+    flowed = flowed.encode("latin-1", "replace").decode("latin-1", "ignore")
+    flowed = flowed.strip()
     d = ImageDraw.Draw(img)
-    print("\n\n\n===============================\n\n\n")
-    print(flowed)
+    print("\tflowed:\n", flowed)
     size = d.textsize(flowed)
     x = (blurb.x + blurb.w / 2) - (size[0] / 2)
     y = (blurb.y + blurb.h / 2) - (size[1] / 2)
     x = int(x)
     y = int(y)
     img.paste((255, 255, 255), (x, y, x + size[0], y + size[1]))
-    d.text((x, y), flowed.strip(), fill=(0, 0, 0))
+    d.text((x, y), flowed.strip(), fill=(87, 6, 6))
