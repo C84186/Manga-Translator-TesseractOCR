@@ -13,6 +13,9 @@ def flow_into_box(text, w, font=None, min_word_on_line=.3):
             return d.textsize(l, font=font)[0]
         else:
             return 0
+
+    # fix text type...
+    text = text.decode(encoding='utf-8')
     dImg = Image.new("RGB", (100, 100))
     d = ImageDraw.Draw(dImg)
     lines = []
@@ -47,9 +50,18 @@ def flow_into_box(text, w, font=None, min_word_on_line=.3):
                 lines.append(c_text)
                 idx += len(c_text) - 1
 
-    if len(line) > 0:
-        lines.append(line)
+    def safe_ascii(txt):
+        if type(txt) is str:
+            txt = txt.encode('ascii', 'ignore')
+        if type(txt) is bytes:
+            txt = txt.decode('utf-8').encode('ascii', 'ignore')
+        return txt.decode('ascii', 'ignore')
 
+    if len(line) > 0:
+        lines.append(safe_ascii(line))
+
+    # ensure that it it can be latin encoded
+    print(lines)
     return "\n".join(lines)
 
 
@@ -66,8 +78,12 @@ def typeset_blurb(img, blurb):
     # pickle.dump(img, open("tts.pkl", mode="w"))
     flowed = flow_into_box(text, blurb.w, usingFont)
     d = ImageDraw.Draw(img)
+    print("\n\n\n===============================\n\n\n")
+    print(flowed)
     size = d.textsize(flowed)
     x = (blurb.x + blurb.w / 2) - (size[0] / 2)
     y = (blurb.y + blurb.h / 2) - (size[1] / 2)
+    x = int(x)
+    y = int(y)
     img.paste((255, 255, 255), (x, y, x + size[0], y + size[1]))
     d.text((x, y), flowed.strip(), fill=(0, 0, 0))

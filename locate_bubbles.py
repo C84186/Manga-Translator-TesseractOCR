@@ -10,6 +10,8 @@ from PIL import Image
 from translate import Blurb
 from googletrans import Translator
 
+if sys.platform == 'win32':
+  pytesseract.pytesseract.tesseract_cmd = 'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
 
 translator = Translator()
 
@@ -44,7 +46,7 @@ def get_blurbs(img):
   kernel = np.ones((2,2),np.uint8)
   img_gray = cv2.erode(img_gray, kernel,iterations = 2)
   img_gray = cv2.bitwise_not(img_gray)
-  im2, contours, hierarchy = cv2.findContours(img_gray,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+  contours, hierarchy = cv2.findContours(img_gray,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
 
   pruned_contours = []
   mask = np.zeros_like(img)
@@ -58,7 +60,7 @@ def get_blurbs(img):
 
   # find contours for the mask for a second pass after pruning the large and small contours
   cv2.drawContours(mask, pruned_contours, -1, (255,255,255), 1)
-  im2, contours2, hierarchy = cv2.findContours(mask,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_NONE)
+  contours2, hierarchy = cv2.findContours(mask,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_NONE)
 
   final_mask = cv2.cvtColor(np.zeros_like(img), cv2.COLOR_BGR2GRAY)
 
@@ -85,6 +87,7 @@ def get_blurbs(img):
       if text:
         blurb = Blurb(x, y, w, h, text)
         blurbs.append(blurb)
-        print ("Attempt: " + text + ' -> ' + translator.translate(text,dest='vi').text)
+        # this is doing vietnamnese - try to do it in english...
+        # print ("Attempt: " + text + ' -> ' + translator.translate(text,dest='vi').text)
 
   return blurbs

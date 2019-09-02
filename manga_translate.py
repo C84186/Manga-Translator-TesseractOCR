@@ -37,7 +37,7 @@ def main():
             i = i + 1
 
     print ('Statistic:')
-    print transImg
+    print (transImg)
     print ('Number of translated pages:' + str(i))
 
 
@@ -58,7 +58,7 @@ def load_names_from_folder(folder):
     for filename in os.listdir(folder):
         if filename is not None:
             names.append(filename)
-            print filename
+            print (filename)
 
     return names
 
