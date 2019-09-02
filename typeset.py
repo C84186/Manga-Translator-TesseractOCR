@@ -74,7 +74,8 @@ def typeset_blurb(img, blurb):
     area = blurb.w * blurb.h
     fontsize = int(math.sqrt(area) / 10)
     # usingFont = ImageFont.truetype(font="ccwildword.ttf", size=fontsize)
-    usingFont = ImageFont.truetype(font="arial.ttf", size=fontsize)
+    # usingFont = ImageFont.truetype(font="arial.ttf", size=fontsize)
+    usingFont = ImageFont.truetype(font="framd.ttf", size=fontsize)
 
     # pickle.dump(img, open("tts.pkl", mode="w"))
     flowed = flow_into_box(text, blurb.w, usingFont)

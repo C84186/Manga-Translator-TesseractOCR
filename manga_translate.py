@@ -12,17 +12,18 @@ def main():
 
     imgPath = "img"
     transPath = "translated"
+    lang = "kor"  # lang = "jpn_vert"
 
     images = load_images_from_folder(imgPath)
     print("Processing images:")
     names = load_names_from_folder(imgPath)
-    print("JAPANESE" + " " + "->")
+    print("Using Tesseract Language {}".format(lang))
 
     transImg = []
     i = 0
 
     for img in images:
-        blurbs = locate_bubbles.get_blurbs(img)
+        blurbs = locate_bubbles.get_blurbs(img, lang)
         needTransImg = Image.fromarray(img.copy())
 
         for blurb in blurbs:

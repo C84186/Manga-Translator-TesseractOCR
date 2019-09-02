@@ -16,8 +16,8 @@ if sys.platform == "win32":
     )
 
 translator = Translator()
-# lang = "kor_vert"
-lang = "jpn_vert"
+lang = "kor"
+# lang = "jpn_vert"
 
 
 def get_params():
@@ -40,7 +40,7 @@ def get_params():
     return params
 
 
-def get_blurbs(img):
+def get_blurbs(img, lang=lang):
     img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     img_gray = cv2.bitwise_not(
         cv2.adaptiveThreshold(
