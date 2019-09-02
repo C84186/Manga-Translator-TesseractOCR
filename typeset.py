@@ -7,7 +7,7 @@ from PIL import ImageFont
 from translate import TranslatedBlurb
 
 
-def flow_into_box(text, w, font=None, min_word_on_line=.3):
+def flow_into_box(text, w, font=None, min_word_on_line=0.3):
     def text_width(l):
         if l:
             return d.textsize(l, font=font)[0]
@@ -15,7 +15,7 @@ def flow_into_box(text, w, font=None, min_word_on_line=.3):
             return 0
 
     # fix text type...
-    text = text.decode(encoding='utf-8')
+    text = text.decode(encoding="utf-8")
     dImg = Image.new("RGB", (100, 100))
     d = ImageDraw.Draw(dImg)
     lines = []
@@ -32,14 +32,14 @@ def flow_into_box(text, w, font=None, min_word_on_line=.3):
             c_text = text[idx:]
         c_width = text_width(c_text)
         proportion_of_fit = float(w - running_width) / c_width
-        if proportion_of_fit > .95:
+        if proportion_of_fit > 0.95:
             line += c_text
             idx += len(c_text)
-#        elif proportion_of_fit > min_word_on_line:
-#            split = max(int(proportion_of_fit * len(c_text)), 1)
-#            c_text = c_text[:split] + "-"
-#            line += c_text
-#            idx += len(c_text) - 1
+        #        elif proportion_of_fit > min_word_on_line:
+        #            split = max(int(proportion_of_fit * len(c_text)), 1)
+        #            c_text = c_text[:split] + "-"
+        #            line += c_text
+        #            idx += len(c_text) - 1
         else:
             if len(line) > 0:
                 lines.append(line)
@@ -52,10 +52,10 @@ def flow_into_box(text, w, font=None, min_word_on_line=.3):
 
     def safe_ascii(txt):
         if type(txt) is str:
-            txt = txt.encode('ascii', 'ignore')
+            txt = txt.encode("ascii", "ignore")
         if type(txt) is bytes:
-            txt = txt.decode('utf-8').encode('ascii', 'ignore')
-        return txt.decode('ascii', 'ignore')
+            txt = txt.decode("utf-8").encode("ascii", "ignore")
+        return txt.decode("ascii", "ignore")
 
     if len(line) > 0:
         lines.append(safe_ascii(line))
